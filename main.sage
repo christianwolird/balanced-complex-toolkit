@@ -1,7 +1,7 @@
-load('simplex_tools.sage')
+load('homogeneous_complex.sage')
 
 
-K = HomogeneousComplex.complete_complex(6, 2, is_singular=False)
+K = HomogeneousComplex.complete_complex(5, 1, is_singular=False)
 
 print(K)
 print(' ')
@@ -11,8 +11,12 @@ print(' ')
 
 print('Balancing matrix:')
 M = K.balancing_matrix
-print(M.transpose())
+print(M)
 print(' ')
 
-print('Kernal:')
-print(M.kernel())
+print('Kernal basis:')
+for v in M.right_kernel().basis():
+    print(v)
+print(' ')
+
+#K.all_balancings_naive(1)

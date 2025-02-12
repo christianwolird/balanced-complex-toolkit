@@ -1,7 +1,14 @@
 from itertools import combinations, combinations_with_replacement
 
+load('custom_simplex.sage')
+
 
 class HomogeneousComplex:
+    """
+    A collection of simplices of the same dimension.
+    Handles singular simplexes.
+    """
+
     def __init__(self, facets):
         self.facets = [CustomSimplex(facet) for facet in facets]
         self.facettos = self._compute_facettos()
@@ -43,6 +50,17 @@ class HomogeneousComplex:
 
         return variables
 
+    def all_balancings_naive(self, weight_limit):
+        legal_weights = range(-weight_limit, weight_limit + 1)
+        num_facets = len(self.facets)
+        print('TEST', legal_weights, num_facets)
+
+        for comb in combinations_with_replacement(legal_weights, num_facets):
+            print(comb)
+            v = Matrix(comb)
+            print(Matrix(comb) * self.balancing_matrix)
+            print(' ')
+
     def _compute_facettos(self):
         # Precompute and store faces one dimension lower.
         facettos = set()
@@ -58,44 +76,11 @@ class HomogeneousComplex:
         num_facettos = len(self.facettos)
 
         # One row per facetto and one column for facet.
-        M = Matrix(QQ, num_facets, num_facettos)
+        M = Matrix(QQ, num_facettos, num_facets)
 
         for facetto_index, facetto in enumerate(self.facettos):
             for facet_index, facet in enumerate(self.facets):
-                M[facet_index, facetto_index] = facetto.multiplicity(facet)
+                M[facetto_index, facet_index] = facetto.multiplicity(facet)
 
         return M
 
-
-class CustomSimplex:
-    def __init__(self, vertices):
-        self.vertices = tuple(sorted(vertices))
-
-    def __str__(self):
-        return str(self.vertices) 
-
-    def __repr__(self):
-        return str(self)
-
-    def __len__(self):
-        return len(self.vertices)
-
-    def __iter__(self):
-        for v in self.vertices:
-            yield v
-
-    def __eq__(self, other):
-        if isinstance(other, CustomSimplex):
-            return self.vertices == other.vertices
-        return False
-
-    def __hash__(self):
-        return hash(self.vertices)
-
-    def multiplicity(self, other):
-        mult = 1
-        for i in self.vertices:
-            mult *= self.vertices.count(i) * other.vertices.count(i)
-        return mult
-
-        
