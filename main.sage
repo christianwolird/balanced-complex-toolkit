@@ -1,9 +1,9 @@
 load('homogeneous_complex.sage')
 
 
-K = HomogeneousComplex.complete_complex(5, 1, is_singular=False)
+K = HomogeneousComplex.complete_complex(4, 1, is_singular=False)
 
-print(K)
+print('Facets:', K.facets)
 print(' ')
 
 print('Facettos:', K.facettos)
@@ -19,4 +19,6 @@ for v in M.right_kernel().basis():
     print(v)
 print(' ')
 
-#K.all_balancings_naive(1)
+print('All balancings with |weight| <= 1')
+for weights in K.all_balancings_naive(1):
+    print(weights)

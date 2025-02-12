@@ -1,4 +1,4 @@
-from itertools import combinations, combinations_with_replacement
+import itertools
 
 load('custom_simplex.sage')
 
@@ -29,9 +29,9 @@ class HomogeneousComplex:
         """
 
         if is_singular:
-            relevant_combinations = combinations_with_replacement
+            relevant_combinations = itertools.combinations_with_replacement
         else:
-            relevant_combinations = combinations
+            relevant_combinations = itertools.combinations
 
         facets = []
         for comb in relevant_combinations(range(n), d+1):
@@ -53,20 +53,19 @@ class HomogeneousComplex:
     def all_balancings_naive(self, weight_limit):
         legal_weights = range(-weight_limit, weight_limit + 1)
         num_facets = len(self.facets)
-        print('TEST', legal_weights, num_facets)
 
-        for comb in combinations_with_replacement(legal_weights, num_facets):
-            print(comb)
-            v = Matrix(comb)
-            print(Matrix(comb) * self.balancing_matrix)
-            print(' ')
+        for comb in itertools.product(legal_weights, repeat=num_facets):
+            weights = Matrix(comb).transpose()
+            facetto_sums = self.balancing_matrix * weights
+            if facetto_sums.is_zero():
+                yield weights.transpose()
 
     def _compute_facettos(self):
         # Precompute and store faces one dimension lower.
         facettos = set()
 
         for facet in self.facets:
-            for facetto in combinations(facet, len(facet) - 1):
+            for facetto in itertools.combinations(facet, len(facet) - 1):
                 facettos.add(CustomSimplex(facetto))
 
         return facettos
