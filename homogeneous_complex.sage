@@ -61,11 +61,10 @@ class HomogeneousComplex:
         Generate all weightings for the facets that satisfy the balancing condition.
         
         The weights are drawn from the range [-weight_limit, weight_limit]. 
-        For all possible combinations, this checks if the complex is balanced.
+        For all possible combinations of weights, we check if the complex is balanced.
 
-        Yields:
-            Matrix: A matrix of weights (one per facet) that satisfies the balancing 
-                    condition.
+        Yields (as generator):
+            SageMath Matrices: Column vectors of facet-weights balancing the complex.
         """
         legal_weights = range(-weight_limit, weight_limit + 1)  # Legal weight range
         num_facets = len(self.facets)  # Number of facets in the complex
@@ -80,7 +79,20 @@ class HomogeneousComplex:
 
             # If the sum is zero (balancing condition satisfied), yield the weights
             if facetto_sums.is_zero():
-                yield weights.transpose()  # Yield the weights as a row matrix
+                yield weights.transpose()  # Yield the weights as a column vector.
+
+    def all_balancings_sudoku(self, weight_limit):
+        """
+        Generate all weightings for the facets that satisfy the balancing condition.
+        
+        The weights are drawn from the range [-weight_limit, weight_limit]. 
+        Instead of a brute-force search, we fill in the weights strategically like
+        doing a Sudoku or crossword puzzle.
+
+        Yields (as generator):
+            SageMath Matrices: Column vectors of facet-weights balancing the complex.
+        """
+        pass # TODO
 
     def _compute_facettos(self):
         """
@@ -90,7 +102,7 @@ class HomogeneousComplex:
         removed). This method generates and stores all (d-1)-dimensional faces 
         (facettos) from the given d-dimensional facets.
 
-        Returns a set containing all computed facettos as CustomSimplex objects.
+        Returns a Python set containing all facettos as CustomSimplex objects.
         """
         facettos = set()  # Initialize an empty set to store the facettos
 
@@ -111,7 +123,7 @@ class HomogeneousComplex:
         The entries in the matrix represent the multiplicity of the intersection
         between each facetto and each facet.
         
-        Returns a SageMath matrix of size #facettos x #facets.
+        Returns a SageMath Matrix of size #facettos x #facets.
         """
         num_facets = len(self.facets)  # Number of facets.
         num_facettos = len(self.facettos)  # Number of facettos.
