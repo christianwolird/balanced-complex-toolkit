@@ -9,8 +9,11 @@ class HomogeneousComplex:
     Handles singular simplexes.
     """
 
-    def __init__(self, facet_tuples):
-        self.facets = [CustomSimplex(facet) for facet in facet_tuples]
+    def __init__(self, facets):
+        """
+        Initialize a HomogeneousComplex with a list of CustomSimplex instances.
+        """
+        self.facets = facets
         self.facettos = self._compute_facettos()
 
         self.balancing_matrix = self._compute_balancing_matrix()
