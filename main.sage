@@ -1,29 +1,13 @@
 load('homogeneous_complex.sage')
 
-num_vertices = 4
-dimension = 1
+num_vertices = 3
+dimension = 2
 weight_limit = 1
 
-K = HomogeneousComplex.complete_complex(num_vertices, dimension, is_singular=False)
+K = HomogeneousComplex.complete_complex(num_vertices, dimension, is_singular=True)
 
-print(f'# vertices: {num_vertices}')
+K.print_info()
 
-print(f'Facets: {K.facets}')
-print(' ')
-
-print(f'Facettos: {K.facettos}')
-print(' ')
-
-print('Balancing matrix:')
-M = K.balancing_matrix
-print(M)
-print(' ')
-
-print('Kernal basis:')
-for v in M.right_kernel().basis():
-    print(v)
-print(' ')
-
-print(f'All balancings with |weight| <= {weight_limit}')
-for weights in K.all_balancings_naive(weight_limit):
-    print(weights)
+print('All balancings:')
+for weight_dict in K.all_balancings_sudoku(1):
+    print(K.weight_dict_to_vector(weight_dict))
