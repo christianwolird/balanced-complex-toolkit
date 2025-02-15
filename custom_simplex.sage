@@ -8,7 +8,7 @@ class CustomSimplex:
         self.vertices = tuple(sorted(vertices))
 
     def multiplicity(self, other):
-        """Compute the multiplicity with another CustomSimplex."""
+        """Compute the multiplicity of this simplex inside another."""
         mult = 1
         for i in self.vertices:
             mult *= self.vertices.count(i) * other.vertices.count(i)
