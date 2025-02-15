@@ -105,15 +105,11 @@ class WeightedComplex:
 
     def all_balancings_sudoku(self, weight_limit):
         """
-        Generate all weightings for the facets that satisfy the balancing condition.
+        Generate all balanced weightings of the facets within a weight range.
         Use a recursive smart search inspired by solving Sudoku puzzles.
         
         Parameters:
             weight_limit: The weights are chosen from [-weight_limit, weight_limit]. 
-            initial_weights (dict, optional): 
-                A collection of pre-specified facet weights. If used, this will
-                return only the balanced weight-sets matching these initial weights.
-                Format: {<facet>: <weight>}
 
         Instead of a brute-force search, we fill in the weights strategically like
         doing a Sudoku or crossword puzzle. The method is recursive.
@@ -143,10 +139,74 @@ class WeightedComplex:
                     continue
 
                 # Recursively continue filling in the weights.
-                for person in child.all_balancings_sudoku(weight_limit):
-                    yield person
+                for descendant in child.all_balancings_sudoku(weight_limit):
+                    yield descendant
 
             break # Only handle one unspecified facet per method call.
+
+    def fill_determined_weights(self):
+        """
+        Experimental: Iteratively fills in any weights which are determined by one of 
+        the balancing conditions. I.e. if any facetto is contained in only one 
+        undefined facet, then there is only one weight for the undefined facet which 
+        balances the facetto.
+
+        The method loops until no more determinations can be made, since assigning
+        one facet's weight might enable us to determine a facet somewhere else.
+
+        Status:
+            - Currently disables due to poor performance benefits.
+            - Kept in codebase for future exploration and potential optimization.
+
+        Returns:
+            bool: True if at least one new weight was assigned. False oth.
+        """
+        updated = True
+
+        # Continue looping for as long as we can assign a new weight.
+        while True:
+            assignment_made = False
+
+            # Iterate over all facettos in the complex.
+            for facetto_idx, facetto in enumerate(self.comp.facettos):
+                
+
+                # Get the multiplicities for this facetto.
+                facetto_row = self.comp.multiplicity_matrix[facetto_idx]
+
+                defined_sum = 0
+                involved_facets = []
+
+                # Get the facets containing this facetto.
+                # Add up the (defined) weighted multiplicities along the way.
+                for facet_idx, facet in enumerate(self.comp.facets):
+                    if facetto_row[facet_idx] != 0:
+                        involved_facets.append(facet)
+
+                        if self.weights[facet] is not None:
+                            defined_sum += facetto_row[facet_idx] * self.weights[facet]
+                
+                # Get the involved facets whose weights are still undefined.
+                undefined_facets = []
+                for facet in involved_facets:
+                    if self.weights[facet] is None:
+                        undefined_facets.append(facet)
+
+            # Only proceed if there is one undefined facet.
+            if len(undefined_facets) == 1:
+                # Compute the unique weight balancing the current facetto.
+                missing_weight = -defined_sum
+
+                # Assign the computed weight to the remaining facet.
+                self.weights[undefined_facets[0]] = missing_weight
+                assignment_made = True
+                updated = True
+
+            # Exit the loop if no new weight assignments were made.
+            if not assignment_made:
+                break
+
+        return updated
 
     def is_balanced(self):
         """

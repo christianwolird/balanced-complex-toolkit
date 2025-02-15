@@ -25,7 +25,6 @@ class HomogeneousComplex:
 
     def print_info(self):
         """ Prints information about the structure of this complex. """
-        print(f"# vertices: {num_vertices}\n")
         print(f"Facets: {K.facets}\n")
         print(f"Facettos: {K.facettos}\n")
 
