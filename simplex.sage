@@ -1,10 +1,10 @@
-class CustomSimplex:
+class Simplex:
     """
     Wrapper for a tuple representing a simplex. Has a multiplicity function.
     """
 
     def __init__(self, vertices):
-        """Initialize a CustomSimplex with sorted vertices."""
+        """Initialize a Simplex with sorted vertices."""
         self.vertices = tuple(sorted(vertices))
 
     def multiplicity(self, other):
@@ -20,7 +20,7 @@ class CustomSimplex:
         return str(self.vertices)
 
     def __repr__(self):
-        """Return a string representation of the CustomSimplex."""
+        """Return a string representation of the Simplex."""
         return str(self)
 
     def __len__(self):
@@ -33,12 +33,12 @@ class CustomSimplex:
             yield v
 
     def __eq__(self, other):
-        """Check equality with another CustomSimplex."""
-        if isinstance(other, CustomSimplex):
+        """Check equality with another Simplex."""
+        if isinstance(other, Simplex):
             return self.vertices == other.vertices
         return False
 
     def __hash__(self):
-        """Return a hash value for the CustomSimplex."""
+        """Return a hash value for the Simplex."""
         return hash(self.vertices)
 

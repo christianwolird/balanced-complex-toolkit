@@ -1,13 +1,13 @@
 import itertools
 
-load('homogeneous_complex.sage')
+load('complex.sage')
 
 
 class WeightedComplex:
     """
-    An extension of HomogeneousComplex that assigns weights to facets.
+    An extension of Complex that assigns weights to facets.
     
-    This class contains a HomogeneousComplex and a weight dictionary.
+    This class contains a Complex and a weight dictionary.
     These weights are used to check balancing conditions.
     """
 
@@ -16,7 +16,7 @@ class WeightedComplex:
         Initializes a WeighedComplex.
 
         Parameters:
-            comp (HomogeneousComplex): The underlying simplicial complex.
+            comp (Complex): The underlying simplicial complex.
             weights (dict, optional): A dictionary mapping each facet to a weight.
         """
         self.comp = comp
@@ -35,7 +35,7 @@ class WeightedComplex:
             WeighedComplex: A new instance with the same underlying complex and a
                             copied weight dictionary.
 
-        Note: The underlying HomogeneousComplex is not copied. It is treated as
+        Note: The underlying Complex is not copied. It is treated as
         immutable from the perspective of WeightedComplex.
         """
         return WeightedComplex(self.comp, dict(self.weights))
@@ -51,7 +51,7 @@ class WeightedComplex:
     def weight_vector(self):
         """ 
         Returns this complex's weights as a vector compatible with the multiplicity
-        matrix in the corresponding HomogeneousComplex.
+        matrix in the corresponding Complex.
         """
         weight_list = []
         for facet in self.comp.facets:
@@ -66,7 +66,7 @@ class WeightedComplex:
         Converts a weight vector into a dictionary mapping facets to weights.
 
         The resulting vector is compatible with the multiplicity matrix of the 
-        underlying HomogeneousComplex.
+        underlying Complex.
         """
         weight_dict = dict()
 

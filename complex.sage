@@ -1,9 +1,10 @@
 import itertools
 
-load('custom_simplex.sage')
+# Overrides 'Simplex' class.
+load('simplex.sage')
 
 
-class HomogeneousComplex:
+class Complex:
     """
     A collection of simplices of the same dimension.
     Handles singular simplexes.
@@ -11,14 +12,14 @@ class HomogeneousComplex:
 
     def __init__(self, facets):
         """
-        Initialize a HomogeneousComplex with a list of CustomSimplex instances.
+        Initialize a Complex with a list of Simplex instances.
         """
         self.facets = facets
         self.facettos = self._compute_facettos()
         self.multiplicity_matrix = self._compute_multiplicity_matrix()
 
     def __str__(self):
-        return f'HomogeneousComplex:{self.facets}'
+        return f'Complex:{self.facets}'
 
     def __repr__(self):
         return str(self)
@@ -46,7 +47,7 @@ class HomogeneousComplex:
                 (resulting in "singular" simplices). Defaults to False.
 
         Returns:
-            HomogeneousComplex: Containing all d-dimensional faces.
+            Complex: Containing all d-dimensional faces.
         """
 
         # Choose the appropriate combinatorial method.
@@ -61,11 +62,11 @@ class HomogeneousComplex:
 
         # Iterate over all combinations of 'd+1' vertices.
         for comb in relevant_combinations(range(n), d + 1):
-            # Create a CustomSimplex from the current combination; add it to 'facets'.
-            facets.append(CustomSimplex(comb))
+            # Create a Simplex from the current combination; add it to 'facets'.
+            facets.append(Simplex(comb))
 
-        # Return a HomogeneousComplex built from the generated facets.
-        return HomogeneousComplex(facets)
+        # Return a Complex built from the generated facets.
+        return Complex(facets)
 
     def _compute_facettos(self):
         """
@@ -76,7 +77,7 @@ class HomogeneousComplex:
         (facettos) from the given d-dimensional facets.
 
         Returns:
-            list: Containing all facettos as CustomSimplex objects.
+            list: Containing all facettos as Simplex objects.
         """
         facettos = set()  # Initialize an empty set to store the facettos.
 
@@ -84,8 +85,8 @@ class HomogeneousComplex:
         for facet in self.facets:
             # Generate all (d-1)-dimensional faces (combinations of facet vertices).
             for facetto in itertools.combinations(facet, len(facet) - 1):
-                # Store each facetto as a CustomSimplex.
-                facettos.add(CustomSimplex(facetto))
+                # Store each facetto as a Simplex.
+                facettos.add(Simplex(facetto))
 
         return list(facettos)  # Return a list of facettos.
 
