@@ -7,7 +7,7 @@ dimension = 2
 weight_limit = 1
 
 
-K = HomogeneousComplex.complete_complex(num_vertices, dimension, is_singular=True)
+K = HomogeneousComplex.complete_complex(num_vertices, dimension, is_singular=False)
 
 print(f'# vertices = {num_vertices}')
 print(f'dimension = {dimension}\n')
