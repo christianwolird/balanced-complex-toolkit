@@ -1,6 +1,9 @@
-class CustomSimplex:
+class BCTSimplex:
     """
     Wrapper for a tuple representing a simplex. Has a multiplicity function.
+
+    SageMath already had a built-in Simplex class but it seemed faulty.
+    The built-in Simplex exhibited different behaviors when running the same code.
     """
 
     def __init__(self, vertices):
@@ -41,4 +44,8 @@ class CustomSimplex:
     def __hash__(self):
         """Return a hash value for the CustomSimplex."""
         return hash(self.vertices)
+
+    def __lt__(self, other):
+        """Use '<' as slang for multiplicity. """
+        return self.multiplicity(other)
 

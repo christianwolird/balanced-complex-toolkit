@@ -1,6 +1,6 @@
 import itertools
 
-load('custom_simplex.sage')
+load('bct_simplex.sage')
 
 
 class HomogeneousComplex:
@@ -11,7 +11,7 @@ class HomogeneousComplex:
 
     def __init__(self, facets):
         """
-        Initialize a HomogeneousComplex with a list of CustomSimplex instances.
+        Initialize a HomogeneousComplex with a list of BCTSimplex instances.
         """
         self.facets = facets
         self.facettos = self._compute_facettos()
@@ -61,8 +61,8 @@ class HomogeneousComplex:
 
         # Iterate over all combinations of 'd+1' vertices.
         for comb in relevant_combinations(range(n), d + 1):
-            # Create a CustomSimplex from the current combination; add it to 'facets'.
-            facets.append(CustomSimplex(comb))
+            # Create a BCTSimplex from the current combination; add it to 'facets'.
+            facets.append(BCTSimplex(comb))
 
         # Return a HomogeneousComplex built from the generated facets.
         return HomogeneousComplex(facets)
@@ -76,7 +76,7 @@ class HomogeneousComplex:
         (facettos) from the given d-dimensional facets.
 
         Returns:
-            list: Containing all facettos as CustomSimplex objects.
+            list: Containing all facettos as BCTSimplex objects.
         """
         facettos = set()  # Initialize an empty set to store the facettos.
 
@@ -84,8 +84,8 @@ class HomogeneousComplex:
         for facet in self.facets:
             # Generate all (d-1)-dimensional faces (combinations of facet vertices).
             for facetto in itertools.combinations(facet, len(facet) - 1):
-                # Store each facetto as a CustomSimplex.
-                facettos.add(CustomSimplex(facetto))
+                # Store each facetto as a BCTSimplex.
+                facettos.add(BCTSimplex(facetto))
 
         return list(facettos)  # Return a list of facettos.
 
